@@ -1,6 +1,7 @@
-/*
+
 package com.in28minutes.microservices.currencyexchangeservice;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class CircuitBreakerController {
 
 	private Logger logger = 
 				LoggerFactory.getLogger(CircuitBreakerController.class);
-	
+	/*
 	@GetMapping("/sample-api")
 	//@Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
 	//@CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
@@ -35,5 +36,39 @@ public class CircuitBreakerController {
 	public String hardcodedResponse(Exception ex) {
 		return "fallback-response";
 	}
+
+	 */
+
+	@GetMapping("/sample-api")
+    //retry in case of failure for now just return the default value
+	//@Retry(name="default")
+	//it will try thrice and only then return error
+	//else we can call fall back method after all failure
+	//@Retry(name="sample-api",fallbackMethod = "hardcodedResponse")
+
+	//what it does after some amount that is in thousands call it wont hit the method anymore and
+	//return the response back
+	//@CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+
+	//in particular time only particular amount of hits can be maid i.e 10s-->10000calls
+	//@RateLimiter(name = "default")
+
+	//no of concurent calls
+	@Bulkhead(name="sample-api")
+	//10s => 10000 calls to the sample api
+	public String sampleApi() {
+		logger.info("Sample api call received");
+		//this url will lend to failure
+				ResponseEntity<String> forEntity = new RestTemplate().getForEntity("http://localhost:8080/some-dummy-url",
+					String.class);
+		return forEntity.getBody();
+
+	}
+
+	//and it consist parameter of type throwable
+	public String hardcodedResponse(Exception ex) {
+		return "fallback-response";
+	}
+
 }
-*/
+

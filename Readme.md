@@ -16,3 +16,6 @@ Zipkin Distributed Tracing Server :  9411
 http://localhost:8888/limit-service/{profile-to_check}
 
 # H2 Db (data.sql) is bydefault db for JPA in memory database
+
+#sesilience4j url to study more
+https://resilience4j.readme.io/docs/getting-started-3
