@@ -105,3 +105,10 @@ docker stats
 docker container run -p 5001:5000  -m 512m --cpu-quota 5000 -d  in28min/todo-rest-api-h2:1.0.0.RELEASE
 
 docker system df
+
+
+#Distributed Tracing Server (Zipkin for microservices)
+docker run -p 9411:9411 openzipkin/zipkin:2.23
+
+#To build image throw maven if installed locally else do it by ide eclude mvn
+mvn spring-boot:build-image -DskipTests

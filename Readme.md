@@ -17,5 +17,8 @@ http://localhost:8888/limit-service/{profile-to_check}
 
 # H2 Db (data.sql) is bydefault db for JPA in memory database
 
-#sesilience4j url to study more
+#resilience4j url to study more
 https://resilience4j.readme.io/docs/getting-started-3
+
+#docker bookmark url to import project
+https://github.com/in28minutes/spring-microservices-v2/tree/main/04.docker

@@ -41,7 +41,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
-<!--
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
@@ -56,7 +56,7 @@
 			<groupId>org.springframework.amqp</groupId>
 			<artifactId>spring-rabbit</artifactId>
 		</dependency>
--->
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -102,6 +102,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- configuration for docker-->
+				<configuration>
+				        <image>
+						      <name><!-- dockerId/prefixing/artifactId:version-->
+							  in28min/mmv2-${project.artifactId}:${project.version}
+							  </name>
+						</image>
+						<pullPolicy><!-- default is alwayes  for loacally-->
+						IF_NOT_PRESENT
+						</pullPolicy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
