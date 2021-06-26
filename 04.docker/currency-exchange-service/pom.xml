@@ -99,13 +99,17 @@
 
 	<build>
 		<plugins>
+			<!--plugin for docker Image -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- configuration for docker Image -->
 				<configuration>
 					<image>
+						<!-- docker_id/prefix-artifact_id of my project:tag -->
 						<name>in28min/mmv2-${project.artifactId}:${project.version}</name>
 					</image>
+					<!-- pull policy default is always  here we are using only if it not present locally -->
 					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
 				</configuration>				
 			</plugin>

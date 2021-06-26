@@ -1,0 +1,122 @@
+# version can be anything for now
+version: '3.7'
+
+#spaces are required just like python fort proper syntax
+services:
+#name of our application make sure it is correct
+    currency-exchange:
+    #Image path that we created
+        image: docker.io/in28min/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+        #memory limit
+        mem_limit: 700m
+        #ports define you can define multiple ports here too
+        ports:
+            - "8000:8000"
+        networks:
+            - currency-network
+        #to tell it depends on naming server
+        depends_on:
+            - naming-server
+            - rabbitmq
+        #configuring enviromnment
+        environment:
+            EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+            SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+            #required thing for our microservives to talk to rabbitmq
+            #RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+            #SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_ZIPKIN_SENDER_TYPE: rabbit
+            
+    currency-conversion:
+    #Image path that we created
+        image: docker.io/in28min/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
+        #memory limit
+        mem_limit: 700m
+        #ports define you can define multiple ports here too
+        ports:
+            - "8100:8100"
+        networks:
+            - currency-network
+        #to tell it depends on naming server
+        depends_on:
+            - naming-server 
+            - rabbitmq
+        #configuring enviromnment
+        environment:
+            SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+            #required thing for our microservives to talk to rabbitmq
+            #RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+            #SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_ZIPKIN_SENDER_TYPE: rabbit
+        
+    api-gateway:
+    #Image path that we created
+        image: docker.io/in28min/mmv2-api-gateway:0.0.1-SNAPSHOT
+        #memory limit
+        mem_limit: 700m
+        #ports define you can define multiple ports here too
+        ports:
+            - "8765:8765"
+        networks:
+            - currency-network
+        #to tell it depends on naming server
+        depends_on:
+            - naming-server
+            - rabbitmq
+        #configuring enviromnment
+        environment:
+            EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+            SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+            #required thing for our microservives to talk to rabbitmq
+            #RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+            #SPRING_RABBITMQ_HOST: rabbitmq
+            SPRING_ZIPKIN_SENDER_TYPE: rabbit
+            
+
+    naming-server:
+    #Image path that we created
+        image: docker.io/in28min/mmv2-naming-server:0.0.1-SNAPSHOT
+        #memory limit
+        mem_limit: 700m
+        #ports define you can define multiple ports here too
+        ports:
+            - "8761:8761"
+        networks:
+            - currency-network 
+            
+     
+    zipkin-server:
+    #Image path that we created
+        image: openzipkin/zipkin:2.23
+        #memory limit
+        mem_limit: 300m
+        #ports define you can define multiple ports here too
+        ports:
+            - "9411:9411"
+        networks:
+            - currency-network 
+        #environment:
+            #RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+        depends_on:
+            - rabbitmq
+        restart: always
+            
+    #adding rabbit mq property here
+    rabbitmq:
+        image: rabbitmq:management-alpine
+        restart: always
+         #memory limit
+        mem_limit: 300m
+        #ports define you can define multiple ports here too
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - currency-network
+ 
+#by default it use by default netowors
+#best practice is to make your own 
+networks:
+    currency-network:
+        
+    

@@ -28,6 +28,12 @@ public class CurrencyConversionController {
 		uriVariables.put("to",to);
 		
 		ResponseEntity<CurrencyConversion> responseEntity = new RestTemplate().getForEntity
+				/**
+				 * this local host will not gonna work inside Docker
+				 * so either you can change this localhost to servive you are using inside yaml
+				 * eg: localhost replace with currency-exchange
+				 * or create a environment variable and use it here
+				 */
 		("http://localhost:8000/currency-exchange/from/{from}/to/{to}", 
 				CurrencyConversion.class, uriVariables);
 		

@@ -135,3 +135,41 @@ docker run -p 9411:9411 openzipkin/zipkin:2.23
 
 #To build image throw maven if installed locally else do it by ide include mvn
 mvn spring-boot:build-image -DskipTests
+
+#run that image we created locally
+##Note you can skip the docker.io from build path
+docker run -p {Host_Port}:{Custome_port} name of build we created
+
+#Docker Compose :for configure multiple docker container in single YAML file
+#already include in window and MAC Docker desktop
+URL :: https://docs.docker.com/compose/
+#check docker compose version
+docker-compose --version
+
+####create a .yaml file with proper syntax then go into that folder and run it
+file_name up  eg: docker-compose up
+
+#Debugging Problems with Docker Compose
+#Debugging microservices problems can be difficult as there are multiple components involved.
+#Step by Step instructions is provided in the troubleshooting guide to help you troubleshoot frequently occurring problems.
+##COMPLETE DEBUGGING GUIDE
+https://github.com/in28minutes/spring-microservices-v2/blob/main/03.microservices/01-step-by-step-changes/microservices-v2-1.md#docker-section---connect-microservices-with-zipkin
+
+#TOP Recommendation from Debugging Guide:
+(2) Try adding restart: always to zipkin-server in docker-compose.yaml
+
+#zipkin-server:
+image: openzipkin/zipkin:2.23
+mem_limit: 300m
+ports:
+- "9411:9411"
+networks:
+- currency-network
+environment:
+RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+depends_on:
+- rabbitmq
+restart: always #Restart if there is a problem starting up
+Fullscreen
+
+
