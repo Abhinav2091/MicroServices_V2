@@ -171,5 +171,12 @@ depends_on:
 - rabbitmq
 restart: always #Restart if there is a problem starting up
 Fullscreen
+  
+####few more related command
+#to login into your docker hub
+docker login 
+
+#to push created image in repo
+docker push image_Id{created image name}
 
 
